@@ -14,6 +14,8 @@ TextEditingController nameController = TextEditingController();
 TextEditingController contactController = TextEditingController();
 List<Contact> contacts = List.empty(growable: true);
 
+  int selectedIndex = -1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,8 +68,20 @@ List<Contact> contacts = List.empty(growable: true);
                   }
                 }, child: const Text("save")),
                 ElevatedButton(onPressed: (){
+                  String name = nameController.text.trim();
+                  String contact = contactController.text.trim();
 
-                }, child: const Text("Update"))
+                  if(name.isNotEmpty && contact.isNotEmpty){
+                    setState(() {
+                      nameController.text = ' ';
+                      contactController.text = ' ';
+                      contacts[selectedIndex].name = name;
+                      contacts[selectedIndex].contact = contact;
+                      selectedIndex = -1;
+                    });
+                  }
+                }, 
+                child: const Text("Update"))
               ],
             ),
             const SizedBox(height: 20,),
@@ -108,6 +122,9 @@ List<Contact> contacts = List.empty(growable: true);
               InkWell(
                 onTap:( () {
                   //
+                  nameController.text = contacts[index].name;
+                  contactController.text = contacts[index].contact;
+                  selectedIndex = index;
                 }),
                 child: const Icon(Icons.edit)),
               InkWell(
